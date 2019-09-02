@@ -20,6 +20,20 @@ spec:
         storage: persistent
       annotations:
     spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: preempt-pool
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: service
+                  operator: In
+                  values:
+                  - pzoo
+              topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
       initContainers:
       - name: init-config

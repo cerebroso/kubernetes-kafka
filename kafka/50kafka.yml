@@ -18,6 +18,20 @@ spec:
         app: kafka
       annotations:
     spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: preempt-pool
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: service
+                  operator: In
+                  values:
+                  - kafka
+              topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 30
       initContainers:
       - name: init-config
